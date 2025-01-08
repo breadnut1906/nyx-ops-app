@@ -1,0 +1,22 @@
+<mat-drawer-container class="example-container">
+    <mat-drawer mode="side" opened>
+        <mat-nav-list>
+            <mat-list-item (click)="onClickGoto('/')">
+                <mat-icon matListItemIcon>arrow_back</mat-icon>
+                <div matListItemTitle>Go Back</div>
+            </mat-list-item>
+            @for (item of menus; track $index) {
+                <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="onClickGoto(item.link)">
+                    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                    <div matListItemTitle>{{ item.text }}</div>
+                </mat-list-item>
+            }
+        </mat-nav-list>
+    </mat-drawer>
+    <mat-drawer-content class="vh-100">
+        <div class="container-fluid">
+            <p class="fs-2 fw-semibold">{{ title }}</p>
+            <router-outlet></router-outlet>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

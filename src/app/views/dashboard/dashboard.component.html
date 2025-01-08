@@ -2,7 +2,7 @@
     <div class="row g-3 w-100 justify-content-center align-items-center p-5">
         @for (item of menus; track $index) {
             <div class="col-12 col-md-6">
-                <mat-card (click)="onClickGoto(item.link)" matRipple>
+                <mat-card style="cursor: pointer;" (click)="onClickGoto(item.link)" matRipple>
                     <mat-card-content>
                         <div class="d-flex flex-row align-items-center p-3">
                             <img class="me-4" [src]="'assets/' + item.image" [alt]="item.image" height="50px" width="50px">

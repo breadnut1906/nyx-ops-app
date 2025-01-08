@@ -3,11 +3,11 @@ import { MaterialUiModule } from '../../modules/material-ui/material-ui.module';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-layout',
+  selector: 'app-main-layout',
   imports: [ MaterialUiModule, RouterOutlet ],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss'
+  templateUrl: './main-layout.component.html',
+  styleUrl: './main-layout.component.scss'
 })
-export class LayoutComponent {
+export class MainLayoutComponent {
 
 }

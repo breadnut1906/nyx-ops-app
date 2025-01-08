@@ -8,7 +8,7 @@ export const routes: Routes = [
     },
     {
         path: '',
-        loadComponent: () => import('./views/layout/layout.component').then((m) => m.LayoutComponent),
+        loadComponent: () => import('./views/main-layout/main-layout.component').then((m) => m.MainLayoutComponent), /**Main Layout */
         children: [
             {
                 path: '',
@@ -18,6 +18,14 @@ export const routes: Routes = [
             {
                 path: 'task-monitoring',
                 title: 'Operations Manager | Task Monitoring',
+                loadComponent: () => import('./components/layout-view/layout-view.component').then((m) => m.LayoutViewComponent), /**Child Layout */
+                data: { 
+                    title: 'Task Monitoring', 
+                    menus: [
+                        { text: 'Dashboard', icon: 'dashboard', link: 'task-monitoring' },
+                        { text: 'Tasks', icon: 'note-add', link: 'task-monitoring/tasks' },
+                    ]
+                },
                 children: [
                     {
                         path: '',
@@ -26,6 +34,28 @@ export const routes: Routes = [
                     {
                         path: 'tasks',
                         loadComponent: () => import('./views/task-monitoring/tasks/tasks.component').then((m) => m.TasksComponent),
+                    }
+                ]
+            },
+            {
+                path: 'scheduler',
+                title: 'Operations Manager | Scheduler',
+                loadComponent: () => import('./components/layout-view/layout-view.component').then((m) => m.LayoutViewComponent), /**Child Layout */
+                data: { 
+                    title: 'Scheduler', 
+                    menus: [
+                        { text: 'Dashboard', icon: 'dashboard', link: 'scheduler' },
+                        { text: 'Gantt Chart', icon: 'edit-calendar' , link: 'scheduler/gantt-chart'},
+                    ]
+                },
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import('./views/scheduler/scheduler-dashboard/scheduler-dashboard.component').then((m) => m.SchedulerDashboardComponent),
+                    },
+                    {
+                        path: 'gantt-chart',
+                        loadComponent: () => import('./views/scheduler/scheduler-gantt-chart/scheduler-gantt-chart.component').then((m) => m.SchedulerGanttChartComponent),
                     }
                 ]
             }
