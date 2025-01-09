@@ -1,5 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 @import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
+
+@include mat.core();
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.gantt-chart{
+    position: relative;
+    width: auto;
+    min-height: 500px;
+}
+
+mat-form-field {
+    @include mat.form-field-density(-3);
+    width: 100%;
+}

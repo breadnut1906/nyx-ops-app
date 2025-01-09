@@ -18,14 +18,6 @@ export const routes: Routes = [
             {
                 path: 'task-monitoring',
                 title: 'Operations Manager | Task Monitoring',
-                loadComponent: () => import('./components/layout-view/layout-view.component').then((m) => m.LayoutViewComponent), /**Child Layout */
-                data: { 
-                    title: 'Task Monitoring', 
-                    menus: [
-                        { text: 'Dashboard', icon: 'dashboard', link: 'task-monitoring' },
-                        { text: 'Tasks', icon: 'note-add', link: 'task-monitoring/tasks' },
-                    ]
-                },
                 children: [
                     {
                         path: '',
@@ -40,14 +32,6 @@ export const routes: Routes = [
             {
                 path: 'scheduler',
                 title: 'Operations Manager | Scheduler',
-                loadComponent: () => import('./components/layout-view/layout-view.component').then((m) => m.LayoutViewComponent), /**Child Layout */
-                data: { 
-                    title: 'Scheduler', 
-                    menus: [
-                        { text: 'Dashboard', icon: 'dashboard', link: 'scheduler' },
-                        { text: 'Gantt Chart', icon: 'edit-calendar' , link: 'scheduler/gantt-chart'},
-                    ]
-                },
                 children: [
                     {
                         path: '',

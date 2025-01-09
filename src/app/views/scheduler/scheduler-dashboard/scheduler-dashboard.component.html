@@ -1,1 +1,9 @@
-<p>scheduler-dashboard works!</p>
+<div class="container-fluid mt-3">
+    <div class="d-flex flex-row w-100 justify-content-center align-items-center">
+        <button class="me-3" (click)="utility.onGotoPage('/')" color="primary" mat-icon-button>
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <p class="fs-5 fw-semibold me-auto p-0 m-0">Overview</p>
+        <button (click)="utility.onGotoPage('scheduler/gantt-chart')" color="primary" mat-flat-button>Gantt Chart</button>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 export class UtilityService {
 
   constructor(
+    private router: Router,
     private breakPointObserver: BreakpointObserver, 
   ) { }
   
@@ -26,5 +28,9 @@ export class UtilityService {
           observer.next(false);
       });
     });
+  }
+
+  onGotoPage(path: string) {
+    this.router.navigate([ path ]);
   }
 }

@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -30,6 +32,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatRippleModule,
     MatSidenavModule,
     MatListModule,
+    MatDividerModule,
+    MatAutocompleteModule,
   ]
 })
 export class MaterialUiModule { }

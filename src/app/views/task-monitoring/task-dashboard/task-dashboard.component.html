@@ -1,1 +1,9 @@
-<p>task-dashboard works!</p>
+<div class="container-fluid mt-3">
+    <div class="d-flex flex-row w-100 justify-content-center align-items-center">
+        <button class="me-3" (click)="utility.onGotoPage('/')" color="primary" mat-icon-button>
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <p class="fs-5 fw-semibold me-auto p-0 m-0">Summary</p>
+        <button (click)="utility.onGotoPage('task-monitoring/tasks')" color="primary" mat-flat-button>Tasks</button>
+    </div>
+</div>

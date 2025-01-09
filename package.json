@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "bootstrap": "^5.3.3",
+    "daterangepicker": "^3.1.0",
     "dhtmlx-gantt": "^9.0.3",
     "moment": "^2.30.1",
     "rxjs": "~7.8.0",

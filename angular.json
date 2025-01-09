@@ -32,10 +32,15 @@
               }
             ],
             "styles": [
+              "node_modules/daterangepicker/daterangepicker.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/moment/min/moment.min.js",
+              "node_modules/daterangepicker/daterangepicker.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -92,10 +97,15 @@
               }
             ],
             "styles": [
+              "node_modules/daterangepicker/daterangepicker.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/moment/min/moment.min.js",
+              "node_modules/daterangepicker/daterangepicker.js"
+            ]
           }
         }
       }

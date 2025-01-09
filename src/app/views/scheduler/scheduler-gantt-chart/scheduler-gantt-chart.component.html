@@ -1,1 +1,37 @@
-<p>scheduler-gantt-chart works!</p>
+<mat-drawer-container class="h-100">
+    <mat-drawer class="rounded-0" #drawer mode="over" position="end">
+        <div class="container">
+            <mat-toolbar><span>Project Name</span></mat-toolbar>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project Name</mat-label>
+                        <input type="text" name="projectName" id="projectName" matInput>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="d-flex flex-column h-100">
+            <div class="container-fluid mt-3">
+                <div class="d-flex flex-row w-100 justify-content-center align-items-center">
+                    <button class="me-3" (click)="utility.onGotoPage('scheduler')" color="primary" mat-icon-button>
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <p class="fs-5 fw-semibold me-auto p-0 m-0">Gantt Chart Schedule</p>
+                    <button (click)="drawer.toggle()" color="primary" mat-flat-button>
+                        <mat-icon>add</mat-icon> New
+                    </button>
+                </div>
+            </div>
+            <div class="container-fluid mt-2 d-flex flex-column flex-grow-1">
+                <div class="w-100">
+                    <app-date-range-picker></app-date-range-picker>
+                </div>
+                
+                <div #gantt class='gantt-chart flex-grow-1'></div>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

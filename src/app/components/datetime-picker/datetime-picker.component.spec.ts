@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutViewComponent } from './layout-view.component';
+import { DatetimePickerComponent } from './datetime-picker.component';
 
-describe('LayoutViewComponent', () => {
-  let component: LayoutViewComponent;
-  let fixture: ComponentFixture<LayoutViewComponent>;
+describe('DatetimePickerComponent', () => {
+  let component: DatetimePickerComponent;
+  let fixture: ComponentFixture<DatetimePickerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LayoutViewComponent]
+      imports: [DatetimePickerComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LayoutViewComponent);
+    fixture = TestBed.createComponent(DatetimePickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
