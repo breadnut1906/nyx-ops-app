@@ -1,19 +1,19 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MaterialUiModule } from '../../../modules/material-ui/material-ui.module';
+import { ComponentsModule } from '../../../modules/components/components.module';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilityService } from '../../../services/utility.service';
+import { MatSidenav } from '@angular/material/sidenav';
 import { gantt } from 'dhtmlx-gantt';
 import moment from 'moment';
-import { MatSidenav } from '@angular/material/sidenav';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ComponentsModule } from '../../../modules/components/components.module';
+import { ProjectTask } from '../../../interfaces/project-task';
 
 declare const $: any; // To avoid TypeScript errors for jQuery
-
 @Component({
   selector: 'app-scheduler-gantt-chart',
   imports: [ MaterialUiModule, ComponentsModule ],
   templateUrl: './scheduler-gantt-chart.component.html',
-  styleUrl: './scheduler-gantt-chart.component.scss'
+  styleUrl: './scheduler-gantt-chart.component.scss',
 })
 export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
   
@@ -23,12 +23,12 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
   /**Parent Task */
   projectForm: FormGroup = new FormGroup({
     id: new FormControl(0),
-    project: new FormControl('', [ Validators.required ]),
+    text: new FormControl('', [ Validators.required ]),
     description: new FormControl('', [ Validators.required ]),
     start_date: new FormControl(moment().format('YYYY-MM-DD')),
     duration: new FormControl(1),
-    readonly: new FormControl(true),
     status: new FormControl(''),
+    readonly: new FormControl(true),
   })
   
   weekScaleTemplate = (date: any) => {
@@ -43,6 +43,43 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 		}
 		return "";
 	};
+
+  /**For Test */
+  projectTasks: ProjectTask[] = [
+    { 
+      id: 1, 
+      text: 'Project #1', 
+      description: "This is the first task.", 
+      start_date: moment("2025-01-01").toDate(), 
+      duration: 3, 
+      status: 'Complete',
+      color: '#4BC0C0',
+      readonly: true,
+      parent: null,
+    },
+    { 
+      id: 2, 
+      text: 'Project #2', 
+      description: "This is the second task.", 
+      start_date: moment("2025-01-02").toDate(), 
+      duration: 5, 
+      status: 'On-Going',
+      color: '#36A2EB',
+      readonly: true,
+      parent: null,
+    },
+    { 
+      id: 3, 
+      text: 'Project #1.2', 
+      description: "This is the first child task.", 
+      start_date: moment("2025-01-02").toDate(), 
+      duration: 2, 
+      status: 'Complete',
+      color: '#4BC0C0',
+      readonly: true,
+      parent: 1
+    }
+  ]
   
   constructor(public utility: UtilityService) { }
 
@@ -70,9 +107,7 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
     gantt.attachEvent("onTaskDblClick", (id, e) => {
       // Returning false prevents the default action (opening task editor, etc.)      
       const data = gantt.getTask(id);
-      // this.taskForm.patchValue(data);
-      
-      // this.dialog.open(this.newTask);
+      this.projectForm.patchValue(data);
       this.drawer.toggle();
       
       return false
@@ -90,9 +125,20 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 
     // Width of the grid on the left
     gantt.config.columns = [
-      { name: "text", label: "Employees", width: "*", tree: true }, // Task name
-      { name: "start_date", label: "Start Date", align: "center", width: 100 }, // Start date
+      { name: "text", label: "Project", width: "*", tree: true }, // Task name
+      { name: "startDate", label: "Start Date", align: "center", width: 100 }, // Start date
     ];
+
+    // Customize the text displayed on the task bars
+    gantt.templates.task_text = (start, end, task) => {
+      if (gantt.hasChild(task.id)) {
+        // Parent Task
+        return `Parent: ${task.text}`;
+      } else {
+        // Child Task
+        return `Child: ${task.text}`;
+      }
+    };
     
     // gantt.setSkin("skyblue");
 
@@ -107,10 +153,7 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 
     gantt.init(this.ganttContainer.nativeElement);
     gantt.parse({
-      data: [
-        { id: 1, text: 'Task 1', description: "This is the first task.", start_date: moment("2025-01-01").toDate(), duration: 5, color: "#FF6347", readonly: false, open: true },
-        { id: 2, text: 'Task 1.1', description: "This is the second task.", start_date: moment("2025-01-01").toDate(), duration: 3, color: "#4682B4", readonly: false, parent: 1 }
-      ],
+      data: this.projectTasks,
     }); 
   }
   
@@ -139,5 +182,10 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
         this.onInitializeGanttChart(event);  
       });
     }
+  }
+
+  onClickCancel() {
+    this.projectForm.reset();
+    this.drawer.toggle();
   }
 }

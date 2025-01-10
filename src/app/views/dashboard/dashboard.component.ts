@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { MaterialUiModule } from '../../modules/material-ui/material-ui.module';
 import { Router } from '@angular/router';
+import { ComponentsModule } from '../../modules/components/components.module';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ MaterialUiModule ],
+  imports: [ MaterialUiModule, ComponentsModule ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

@@ -18,3 +18,7 @@ mat-form-field {
     @include mat.form-field-density(-3);
     width: 100%;
 }
+
+textarea{
+    height: 200px !important;
+}
