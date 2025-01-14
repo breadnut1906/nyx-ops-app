@@ -3,15 +3,20 @@
         <div class="container d-flex flex-column  h-100">
             <mat-toolbar><span>Project Name</span></mat-toolbar>
             <form [formGroup]="projectForm">
-                <mat-form-field appearance="outline">
+                <mat-form-field class="col-12" appearance="outline">
                     <mat-label>Project Name</mat-label>
-                    <input formControlName="text" type="text" name="projectName" id="projectName" matInput>
+                    <input [formControl]="projectControl" type="text" name="projectName" id="projectName" [matAutocomplete]="project" matInput>
+                    <mat-autocomplete #project="matAutocomplete">
+                      @for (item of filteredProjects | async; track item) {
+                        <mat-option [value]="item">{{ item }}</mat-option>
+                      }
+                    </mat-autocomplete>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
+                <mat-form-field class="col-12" appearance="outline">
                     <mat-label>Description</mat-label>
                     <textarea formControlName="description" name="descrption" id="descrption" matInput></textarea>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
+                <mat-form-field class="col-12" appearance="outline">
                     <mat-label>Start date</mat-label>
                     <input formControlName="start_date" matInput [matDatepicker]="picker" (click)="picker.open()">
                     <mat-icon matSuffix>calendar_today</mat-icon>

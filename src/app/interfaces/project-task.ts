@@ -7,5 +7,5 @@ export interface ProjectTask {
     status: string,
     color: string,
     readonly: boolean,
-    parent: number | null,
+    parent?: number,
 }

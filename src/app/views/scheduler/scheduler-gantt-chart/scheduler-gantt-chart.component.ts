@@ -7,6 +7,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { gantt } from 'dhtmlx-gantt';
 import moment from 'moment';
 import { ProjectTask } from '../../../interfaces/project-task';
+import { map, Observable, startWith } from 'rxjs';
 
 declare const $: any; // To avoid TypeScript errors for jQuery
 @Component({
@@ -44,8 +45,12 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 		return "";
 	};
 
+  projectControl: FormControl = new FormControl('');
+  projects: string[] = [ 'Project #1', 'Project #2', 'Project #3' ];
+  filteredProjects!: Observable<any[]>;
+
   /**For Test */
-  projectTasks: ProjectTask[] = [
+  schedulerTasks: ProjectTask[] = [
     { 
       id: 1, 
       text: 'Project #1', 
@@ -55,7 +60,6 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
       status: 'Complete',
       color: '#4BC0C0',
       readonly: true,
-      parent: null,
     },
     { 
       id: 2, 
@@ -66,7 +70,6 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
       status: 'On-Going',
       color: '#36A2EB',
       readonly: true,
-      parent: null,
     },
     { 
       id: 3, 
@@ -84,7 +87,9 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
   constructor(public utility: UtilityService) { }
 
   ngOnInit(): void {
-    
+    this.filteredProjects = this.projectControl.valueChanges.pipe(
+      startWith(''), map(value => this._filterProject(value || ''))
+    )
   }
   
   ngAfterViewInit(): void {
@@ -108,6 +113,7 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
       // Returning false prevents the default action (opening task editor, etc.)      
       const data = gantt.getTask(id);
       this.projectForm.patchValue(data);
+      this.projectControl.patchValue(data.text)
       this.drawer.toggle();
       
       return false
@@ -131,9 +137,9 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 
     // Customize the text displayed on the task bars
     gantt.templates.task_text = (start, end, task) => {
-      if (gantt.hasChild(task.id)) {
+      if (!task.parent) {
         // Parent Task
-        return `Parent: ${task.text}`;
+        return `Assigned Tech (2)`;
       } else {
         // Child Task
         return `Child: ${task.text}`;
@@ -153,7 +159,7 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 
     gantt.init(this.ganttContainer.nativeElement);
     gantt.parse({
-      data: this.projectTasks,
+      data: this.schedulerTasks,
     }); 
   }
   
@@ -187,5 +193,10 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
   onClickCancel() {
     this.projectForm.reset();
     this.drawer.toggle();
+  }
+
+  private _filterProject(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.projects.filter(project => project.toLowerCase().includes(filterValue));
   }
 }
