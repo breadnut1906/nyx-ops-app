@@ -1,4 +1,4 @@
-export interface ProjectTask {
+export interface ScheduledTask {
     id: number,
     text: string,
     description: string,
@@ -8,4 +8,5 @@ export interface ProjectTask {
     color: string,
     readonly: boolean,
     parent: number | null,
+    open: boolean,
 }

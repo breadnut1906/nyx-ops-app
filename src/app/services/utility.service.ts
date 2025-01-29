@@ -2,12 +2,58 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { Projects } from '../interfaces/projects';
+import { AssignedTechnician } from '../interfaces/assigned-technician';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UtilityService {
 
+  projects: Projects[] = [
+    { 
+      id: 1, 
+      name: "SkylineTracker", 
+      description: "A real-time city skyline analysis tool using AI.", 
+      created_at: new Date("2024-01-01"), 
+      updated_at: new Date("2024-01-10") 
+    },
+    { 
+      id: 2, 
+      name: "EcoVision", 
+      description: "An environmental monitoring platform for sustainable initiatives.", 
+      created_at: new Date("2024-01-05"), 
+      updated_at: new Date("2024-01-12") 
+    },
+    { 
+      id: 3, 
+      name: "NeuralSync", 
+      description: "A brainwave synchronization app for focus and relaxation.", 
+      created_at: new Date("2024-01-08"), 
+      updated_at: new Date("2024-01-15") 
+    },
+    { 
+      id: 4, 
+      name: "QuantumFlow", 
+      description: "A simulation tool for quantum computing research.", 
+      created_at: new Date("2024-01-10"), 
+      updated_at: new Date("2024-01-18") 
+    },
+    { 
+      id: 5, 
+      name: "CodeHorizon", 
+      description: "A next-gen IDE with AI-assisted coding features.", 
+      created_at: new Date("2024-01-12"), 
+      updated_at: new Date("2024-01-20") 
+    }
+  ];
+
+  technicians: AssignedTechnician[] = [
+    { id: 1, name: "Alice Johnson", position: "Network Engineer" },
+    { id: 2, name: "Bob Smith", position: "Software Developer" },
+    { id: 3, name: "Charlie Davis", position: "System Administrator" },
+    { id: 4, name: "Diana Lee", position: "Cybersecurity Specialist" },
+    { id: 5, name: "Ethan Wright", position: "Cloud Engineer" }
+  ];
+  
   status: any[] = [
     { text: 'Complete', hex: '#4BC0C0' },
     { text: 'Pending', hex: '#FF9F40' },

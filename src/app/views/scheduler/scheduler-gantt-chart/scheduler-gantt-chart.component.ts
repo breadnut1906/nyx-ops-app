@@ -1,12 +1,11 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { MaterialUiModule } from '../../../modules/material-ui/material-ui.module';
 import { ComponentsModule } from '../../../modules/components/components.module';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilityService } from '../../../services/utility.service';
-import { MatSidenav } from '@angular/material/sidenav';
+import { SchedulerGanttChartService } from '../../../services/scheduler-gantt-chart.service';
+import { ScheduledTask } from '../../../interfaces/scheduled-task';
 import { gantt } from 'dhtmlx-gantt';
 import moment from 'moment';
-import { ProjectTask } from '../../../interfaces/project-task';
 
 declare const $: any; // To avoid TypeScript errors for jQuery
 @Component({
@@ -14,22 +13,14 @@ declare const $: any; // To avoid TypeScript errors for jQuery
   imports: [ MaterialUiModule, ComponentsModule ],
   templateUrl: './scheduler-gantt-chart.component.html',
   styleUrl: './scheduler-gantt-chart.component.scss',
+  providers: [ UtilityService, SchedulerGanttChartService ]
 })
 export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
   
   @ViewChild('gantt', { static: true }) ganttContainer!: ElementRef;
-  @ViewChild('drawer') drawer!: MatSidenav;
-  
-  /**Parent Task */
-  projectForm: FormGroup = new FormGroup({
-    id: new FormControl(0),
-    text: new FormControl('', [ Validators.required ]),
-    description: new FormControl('', [ Validators.required ]),
-    start_date: new FormControl(moment().format('YYYY-MM-DD')),
-    duration: new FormControl(1),
-    status: new FormControl(''),
-    readonly: new FormControl(true),
-  })
+
+  utility = inject(UtilityService);
+  schedulerGanttChartService = inject(SchedulerGanttChartService);
   
   weekScaleTemplate = (date: any) => {
 		var dateToStr = gantt.date.date_to_str("%d %M");
@@ -43,56 +34,23 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 		}
 		return "";
 	};
-
-  /**For Test */
-  projectTasks: ProjectTask[] = [
-    { 
-      id: 1, 
-      text: 'Project #1', 
-      description: "This is the first task.", 
-      start_date: moment("2025-01-01").toDate(), 
-      duration: 3, 
-      status: 'Complete',
-      color: '#4BC0C0',
-      readonly: true,
-      parent: null,
-    },
-    { 
-      id: 2, 
-      text: 'Project #2', 
-      description: "This is the second task.", 
-      start_date: moment("2025-01-02").toDate(), 
-      duration: 5, 
-      status: 'On-Going',
-      color: '#36A2EB',
-      readonly: true,
-      parent: null,
-    },
-    { 
-      id: 3, 
-      text: 'Project #1.2', 
-      description: "This is the first child task.", 
-      start_date: moment("2025-01-02").toDate(), 
-      duration: 2, 
-      status: 'Complete',
-      color: '#4BC0C0',
-      readonly: true,
-      parent: 1
-    }
-  ]
   
-  constructor(public utility: UtilityService) { }
+  constructor() {
+    effect(() => {
+      const data = this.schedulerGanttChartService.scheduledTasks();
+      this.onInitializeGanttChart(data, { start: moment().startOf('month').toDate(), end: moment().toDate() });      
+    })
+  }
 
   ngOnInit(): void {
-    
+    this.schedulerGanttChartService.onFetchScheduledTasks();
   }
   
   ngAfterViewInit(): void {
     this.initializeDateRangePicker();
-    this.onInitializeGanttChart({ start: moment().startOf('month').toDate(), end: moment().toDate() })
   }
 
-  onInitializeGanttChart(dateRange: any) {
+  onInitializeGanttChart(data: ScheduledTask[], dateRange: any) {
     
     // Set the visible date range for the Gantt chart
     gantt.config.start_date = dateRange.start;
@@ -106,10 +64,14 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
     // Disable double-click on tasks (rows)
     gantt.attachEvent("onTaskDblClick", (id, e) => {
       // Returning false prevents the default action (opening task editor, etc.)      
-      const data = gantt.getTask(id);
-      this.projectForm.patchValue(data);
-      this.drawer.toggle();
-      
+      const data: any = gantt.getTask(id);
+      const task: any = Object.keys(gantt.getTask(id))
+        .filter((key) => !key.startsWith('$')) // Exclude properties starting with "$"
+        .reduce((obj, key) => {
+          obj[key] = data[key];
+          return obj;
+        }, {} as Record<string, any>);
+      this.schedulerGanttChartService.onEditTask(task);
       return false
     });
 
@@ -152,9 +114,7 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
     
 
     gantt.init(this.ganttContainer.nativeElement);
-    gantt.parse({
-      data: this.projectTasks,
-    }); 
+    gantt.parse({ data }); 
   }
   
   initializeDateRangePicker() {
@@ -177,15 +137,11 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
           'This Month': [moment().startOf('month'), moment().endOf('month')],
           'Last 3 Months': [moment().subtract(3, 'months').startOf('month'), moment().endOf('month')],
         }
-      }, (start: any, end: any, label: any) => {
-        const event: any = { start: start.toISOString(), end: end.toISOString(), label }        
-        this.onInitializeGanttChart(event);  
+      }, (start: any, end: any, label: any) => {   
+        const event: any = { start: start.toISOString(), end: end.toISOString(), label }
+        const data = this.schedulerGanttChartService.scheduledTasks();
+        this.onInitializeGanttChart(data, event) 
       });
     }
-  }
-
-  onClickCancel() {
-    this.projectForm.reset();
-    this.drawer.toggle();
   }
 }

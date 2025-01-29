@@ -1,0 +1,71 @@
+<mat-toolbar><span>Project Name</span></mat-toolbar>
+
+
+
+<form [formGroup]="scheduleTaskForm">
+
+    @if (parentTask?.value > 0) {
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Select Technician</mat-label>
+            <input type="text" matInput formControlName="text" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaytech">
+                @for (tech of filteredTechnicians | async; track $index) {
+                    <mat-option [value]="tech">{{ tech.name }}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+
+    } @else { 
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Select Project</mat-label>
+            <input type="text" matInput formControlName="text" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                @for (project of filteredProjects | async; track $index) {
+                    <mat-option [value]="project">{{ project.name }}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+    }
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description" name="descrption" id="descrption" matInput></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Start date</mat-label>
+        <input formControlName="start_date" matInput [matDatepicker]="picker" (click)="picker.open()">
+        <mat-icon matSuffix>calendar_today</mat-icon>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="row g-2">
+        <mat-form-field class="col-6" appearance="outline">
+            <mat-label>Days</mat-label>
+            <input formControlName="duration" type="number" [min]="0" matInput>
+        </mat-form-field>
+
+        <mat-form-field class="col-6" appearance="outline">
+            <mat-label>Status</mat-label>
+                <mat-select formControlName="status" name="status">
+                @for (color of utility.status; track color) {
+                    <mat-option [value]="color.text">
+                        <div class="d-flex flex-row justify-content-center">
+                            <span class="square" [ngStyle]="{ 'background-color': color.hex }"></span> 
+                            {{ color.text?.toUpperCase() }}</div>
+                    </mat-option>
+                }
+                </mat-select>
+            </mat-form-field>
+    </div>
+</form>
+<div class="mt-auto mb-5 py-4 row g-3">
+    <div class="col-6">
+        <button class="w-100" (click)="onClickSave()" color="prmary" mat-flat-button>Save</button>
+    </div>
+    <div class="col-6">
+        <button class="w-100" (click)="onClickCancel()" mat-stroked-button>Cancel</button>
+    </div>
+</div>
