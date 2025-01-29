@@ -93,9 +93,9 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
 
     // Customize the text displayed on the task bars
     gantt.templates.task_text = (start, end, task) => {
-      if (gantt.hasChild(task.id)) {
+      if (!task.parent) {
         // Parent Task
-        return `Parent: ${task.text}`;
+        return `Assigned Tech (2)`;
       } else {
         // Child Task
         return `Child: ${task.text}`;
