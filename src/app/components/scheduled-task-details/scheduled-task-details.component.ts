@@ -7,6 +7,7 @@ import moment from 'moment';
 import { map, Observable, startWith } from 'rxjs';
 import { Projects } from '../../interfaces/projects';
 import { AssignedTechnician } from '../../interfaces/assigned-technician';
+import { ScheduledTask } from '../../interfaces/scheduled-task';
 
 @Component({
   selector: 'app-scheduled-task-details',
@@ -22,7 +23,6 @@ export class ScheduledTaskDetailsComponent {
   filteredProjects!: Observable<Projects[]>;  
   filteredTechnicians!: Observable<AssignedTechnician[]>;
   
-  /**Parent Task */
   scheduleTaskForm: FormGroup = new FormGroup({
     id: new FormControl(0),
     text: new FormControl('', [ Validators.required ]),
@@ -38,7 +38,7 @@ export class ScheduledTaskDetailsComponent {
 
   constructor() {
     effect(() => {
-      const task = this.schedulerGanttChartService.selectedScheduledTask();
+      const task = this.schedulerGanttChartService.selectedScheduledTask();      
       if (task) {
         this.scheduleTaskForm.patchValue(task);
       } else {
@@ -64,7 +64,10 @@ export class ScheduledTaskDetailsComponent {
   }
 
   onClickSave() {
-    this.schedulerGanttChartService.onSaveTask(this.scheduleTaskForm.value);
+    const { id, text, status, color, ...info } = this.scheduleTaskForm.value;
+    const totalTask = this.schedulerGanttChartService.scheduledTasks().length;
+    const newColor = this.utility.status.find(s => s.text == status)?.hex;    
+    this.schedulerGanttChartService.onSaveTask({ id: totalTask + 1,text: text.name, status, color: newColor, ...info });
   }
 
   onClickCancel() {

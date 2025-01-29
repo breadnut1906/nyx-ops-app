@@ -37,12 +37,17 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
   
   constructor() {
     effect(() => {
+      // Fetch scheduled tasks on initialization and update the Gantt chart when the data changes
       const data = this.schedulerGanttChartService.scheduledTasks();
-      this.onInitializeGanttChart(data, { start: moment().startOf('month').toDate(), end: moment().toDate() });      
+      this.onInitializeGanttChart(data, { start: moment().startOf('month').toDate(), end: moment().toDate() });
+
+      console.log(data);
+      
     })
   }
 
   ngOnInit(): void {
+    // Fetch scheduled tasks on initialization
     this.schedulerGanttChartService.onFetchScheduledTasks();
   }
   
@@ -138,6 +143,7 @@ export class SchedulerGanttChartComponent implements OnInit, AfterViewInit {
           'Last 3 Months': [moment().subtract(3, 'months').startOf('month'), moment().endOf('month')],
         }
       }, (start: any, end: any, label: any) => {   
+        // Update the Gantt chart with the new date range
         const event: any = { start: start.toISOString(), end: end.toISOString(), label }
         const data = this.schedulerGanttChartService.scheduledTasks();
         this.onInitializeGanttChart(data, event) 

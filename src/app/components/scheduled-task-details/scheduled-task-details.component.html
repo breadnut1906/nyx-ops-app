@@ -9,7 +9,7 @@
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Select Technician</mat-label>
             <input type="text" matInput formControlName="text" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaytech">
+            <mat-autocomplete #auto="matAutocomplete" [autoActiveFirstOption]="false" [displayWith]="displaytech">
                 @for (tech of filteredTechnicians | async; track $index) {
                     <mat-option [value]="tech">{{ tech.name }}</mat-option>
                 }
@@ -63,7 +63,7 @@
 </form>
 <div class="mt-auto mb-5 py-4 row g-3">
     <div class="col-6">
-        <button class="w-100" (click)="onClickSave()" color="prmary" mat-flat-button>Save</button>
+        <button class="w-100" [disabled]="scheduleTaskForm.invalid" (click)="onClickSave()" color="prmary" mat-flat-button>Save</button>
     </div>
     <div class="col-6">
         <button class="w-100" (click)="onClickCancel()" mat-stroked-button>Cancel</button>

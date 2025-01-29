@@ -68,7 +68,8 @@ export class SchedulerGanttChartService {
   }
   
   onSaveTask(task: ScheduledTask) {
-    console.log(task);
+    const tasks = [task, ...this.scheduledTasks()];
+    this.scheduledTasks.set(tasks);
     this.isDrawerOpen.set(false);
   }
 
